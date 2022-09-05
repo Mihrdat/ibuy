@@ -3,6 +3,7 @@ from django.urls import path, include
 
 LOCAL_URLS = [
     path('admin/', admin.site.urls),
+    path('store/', include('store.urls')),
 ]
 
 THIRD_PARTY_URLS = [
