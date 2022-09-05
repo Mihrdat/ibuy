@@ -2,12 +2,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-^fc0f#nk=j21c8*vbnl@@^!jcqx+p5ng4y6v%(&))oc6+kt#@$'
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,13 +40,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ibuy.wsgi.application'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
