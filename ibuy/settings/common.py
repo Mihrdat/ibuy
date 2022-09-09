@@ -99,3 +99,10 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
 }
+
+DJOSER = {
+    'SERIALIZERS': {
+        'current_user': 'core.serializers.UserSerializer',
+        'user': 'core.serializers.UserSerializer',
+    }
+}
