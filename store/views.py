@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .serializers import CollectionSerializer, ProductSerializer
 from .models import Collection, Product
+from .paginations import DefaultPagination
 
 
 class CollectionViewSet(ModelViewSet):
@@ -22,3 +23,4 @@ class CollectionViewSet(ModelViewSet):
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = DefaultPagination
