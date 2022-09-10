@@ -2,10 +2,23 @@ from django.db.models.aggregates import Count
 
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    RetrieveModelMixin,
+)
 
-from .serializers import CollectionSerializer, ProductSerializer
-from .models import Collection, Product
+from .serializers import (
+    CollectionSerializer,
+    ProductSerializer,
+    CartSerializer,
+)
+from .models import (
+    Collection,
+    Product,
+    Cart,
+)
 from .paginations import DefaultPagination
 
 
@@ -24,3 +37,11 @@ class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = DefaultPagination
+
+
+class CartViewSet(CreateModelMixin,
+                  RetrieveModelMixin,
+                  DestroyModelMixin,
+                  GenericViewSet):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer

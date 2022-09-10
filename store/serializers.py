@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from .models import Collection, Product
+from .models import (
+    Collection,
+    Product,
+    Cart,
+)
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -38,3 +42,11 @@ class SimpleProductSerializer(serializers.ModelSerializer):
             'title',
             'unit_price',
         ]
+
+
+class CartSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = Cart
+        fields = ['id']
