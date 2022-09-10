@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from uuid import uuid4
 
 
 class Collection(models.Model):
@@ -15,3 +16,8 @@ class Product(models.Model):
         max_digits=6, decimal_places=2, validators=[MinValueValidator(0.1)])
     collection = models.ForeignKey(
         Collection, on_delete=models.PROTECT, related_name='products')
+
+
+class Cart(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4)
+    created_at = models.DateField(auto_now_add=True)
