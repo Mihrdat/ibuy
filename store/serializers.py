@@ -5,6 +5,7 @@ from .models import (
     Product,
     Cart,
     CartItem,
+    Customer,
 )
 
 
@@ -123,4 +124,17 @@ class CartSerializer(serializers.ModelSerializer):
             'id',
             'items',
             'total_price',
+        ]
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    user = SimpleUserSerializer(read_only=True)
+
+    class Meta:
+        model = Customer
+        fields = [
+            'id',
+            'phone',
+            'birth_date',
+            'user',
         ]

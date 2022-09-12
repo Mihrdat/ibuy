@@ -3,10 +3,14 @@ from django.db.models.aggregates import Count
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.decorators import action
 from rest_framework.mixins import (
     CreateModelMixin,
     DestroyModelMixin,
     RetrieveModelMixin,
+    ListModelMixin,
+    UpdateModelMixin,
 )
 
 from .serializers import (
@@ -16,12 +20,14 @@ from .serializers import (
     CartItemCreateSerializer,
     CartItemSerializer,
     CartItemUpdateSerializer,
+    CustomerSerializer,
 )
 from .models import (
     Collection,
     Product,
     Cart,
     CartItem,
+    Customer,
 )
 from .paginations import DefaultPagination
 from .permissions import IsAdminOrReadOnly
@@ -72,3 +78,24 @@ class CartItemViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'cart_id': self.kwargs['cart_pk']}
+
+
+class CustomerViewSet(ListModelMixin,
+                      RetrieveModelMixin,
+                      UpdateModelMixin,
+                      GenericViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    permission_classes = [IsAdminUser]
+
+    @action(detail=False, methods=['GET', 'PATCH', 'PUT'], permission_classes=[IsAuthenticated])
+    def me(self, request):
+        customer = Customer.objects.get(user=request.user)
+        if request.method == 'GET':
+            serializer = CustomerSerializer(customer)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method in ['PATCH', 'PUT']:
+            serializer = CustomerSerializer(customer, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
