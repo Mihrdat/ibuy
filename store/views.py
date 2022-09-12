@@ -24,11 +24,13 @@ from .models import (
     CartItem,
 )
 from .paginations import DefaultPagination
+from .permissions import IsAdminOrReadOnly
 
 
 class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.annotate(products_count=Count('products'))
     serializer_class = CollectionSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
     def destroy(self, request, *args, **kwargs):
         if Product.objects.filter(collection_id=kwargs['pk']):
@@ -41,6 +43,7 @@ class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = DefaultPagination
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class CartViewSet(CreateModelMixin,
