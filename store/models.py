@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from uuid import uuid4
 
@@ -32,3 +33,10 @@ class CartItem(models.Model):
 
     class Meta:
         unique_together = [['cart', 'product']]
+
+
+class Customer(models.Model):
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
