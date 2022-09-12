@@ -21,6 +21,8 @@ from .serializers import (
     CartItemSerializer,
     CartItemUpdateSerializer,
     CustomerSerializer,
+    OrderCreateSerializer,
+    OrderSerializer,
 )
 from .models import (
     Collection,
@@ -28,6 +30,7 @@ from .models import (
     Cart,
     CartItem,
     Customer,
+    Order,
 )
 from .paginations import DefaultPagination
 from .permissions import IsAdminOrReadOnly
@@ -99,3 +102,33 @@ class CustomerViewSet(ListModelMixin,
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderViewSet(CreateModelMixin,
+                   ListModelMixin,
+                   RetrieveModelMixin,
+                   DestroyModelMixin,
+                   GenericViewSet):
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Order.objects.all()
+        return Order.objects.filter(user=user)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return OrderCreateSerializer
+        return OrderSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
+
+    def create(self, request, *args, **kwargs):
+        serializer = OrderCreateSerializer(
+            data=request.data, context={'user': self.request.user})
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save()
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
