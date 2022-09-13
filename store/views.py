@@ -23,6 +23,7 @@ from .serializers import (
     CustomerSerializer,
     OrderCreateSerializer,
     OrderSerializer,
+    ProductImageSerializer,
 )
 from .models import (
     Collection,
@@ -31,6 +32,7 @@ from .models import (
     CartItem,
     Customer,
     Order,
+    ProductImage,
 )
 from .paginations import DefaultPagination
 from .permissions import IsAdminOrReadOnly
@@ -49,7 +51,7 @@ class CollectionViewSet(ModelViewSet):
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.prefetch_related('images')
     serializer_class = ProductSerializer
     pagination_class = DefaultPagination
     permission_classes = [IsAdminOrReadOnly]
@@ -132,3 +134,13 @@ class OrderViewSet(CreateModelMixin,
         order = serializer.save()
         serializer = OrderSerializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ProductImageViewSet(ModelViewSet):
+    serializer_class = ProductImageSerializer
+
+    def get_serializer_context(self):
+        return {'product_id': self.kwargs['product_pk']}
+
+    def get_queryset(self):
+        return ProductImage.objects.filter(product_id=self.kwargs['product_pk'])

@@ -11,6 +11,7 @@ from .models import (
     Customer,
     Order,
     OrderItem,
+    ProductImage,
 )
 
 
@@ -37,8 +38,19 @@ class CollectionSerializer(serializers.ModelSerializer):
         ]
 
 
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image']
+
+    def create(self, validated_data):
+        product_id = self.context['product_id']
+        return ProductImage.objects.create(product_id=product_id, **validated_data)
+
+
 class ProductSerializer(serializers.ModelSerializer):
     collection_id = serializers.IntegerField()
+    images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
@@ -50,6 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'last_update',
             'unit_price',
             'collection_id',
+            'images',
         ]
 
 
