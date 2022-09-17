@@ -12,6 +12,7 @@ from .models import (
     Order,
     OrderItem,
     ProductImage,
+    Review,
 )
 
 
@@ -219,3 +220,21 @@ class OrderCreateSerializer(serializers.Serializer):
         Cart.objects.filter(pk=cart_id).delete()
 
         return order
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user = SimpleUserSerializer(read_only=True)
+
+    class Meta:
+        model = Review
+        fields = [
+            'id',
+            'description',
+            'date',
+            'user',
+        ]
+
+    def create(self, validated_data):
+        product_id = self.context['product_id']
+        user = self.context['user']
+        return Review.objects.create(product_id=product_id, user=user, **validated_data)
