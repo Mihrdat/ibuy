@@ -61,3 +61,12 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     order = models.ForeignKey(
         Order, on_delete=models.PROTECT, related_name='items')
+
+
+class Review(models.Model):
+    description = models.TextField()
+    date = models.DateField(auto_now_add=True)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
