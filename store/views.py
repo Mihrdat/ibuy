@@ -1,4 +1,5 @@
 from django.db.models.aggregates import Count
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -39,6 +40,7 @@ from .models import (
 )
 from .paginations import DefaultPagination
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from .filters import ProductFilter
 
 
 class CollectionViewSet(ModelViewSet):
@@ -58,8 +60,9 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     pagination_class = DefaultPagination
     permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['title', 'description']
+    filterset_class = ProductFilter
 
 
 class CartViewSet(CreateModelMixin,
