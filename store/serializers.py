@@ -175,6 +175,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     customer = CustomerSerializer()
     items = OrderItemSerializer(many=True)
+    invoice_amount = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
@@ -183,7 +184,11 @@ class OrderSerializer(serializers.ModelSerializer):
             'placed_at',
             'customer',
             'items',
+            'invoice_amount',
         ]
+
+    def get_invoice_amount(self, order):
+        return sum([item.quantity * item.unit_price for item in order.items.all()])
 
 
 class OrderCreateSerializer(serializers.Serializer):
