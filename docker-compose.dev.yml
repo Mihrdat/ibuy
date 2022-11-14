@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=ibuy
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: ./docker-entrypoint.sh
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+
+volumes:
+  mysql-data:
