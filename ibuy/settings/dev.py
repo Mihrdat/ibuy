@@ -7,7 +7,7 @@ DEBUG = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ibuy',
         'HOST': config.DB_HOST,
         'USER': config.DB_USER,

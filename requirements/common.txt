@@ -5,5 +5,5 @@ djangorestframework == 3.14.0
 django-filter == 22.1
 djoser == 2.1.0
 drf-nested-routers == 0.93.4
-mysqlclient == 2.1.1
 pillow == 9.2.0
+psycopg2-binary == 2.9.5

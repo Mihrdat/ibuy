@@ -2,14 +2,14 @@ version: '3.9'
 
 services:
   db:
-    image: mysql:8.0
+    image: postgres:15.1-alpine
     ports:
-      - 3306:3306
+      - 5432:5432
     environment:
-      - MYSQL_DATABASE=ibuy
-      - MYSQL_ROOT_PASSWORD=password
+      - POSTGRES_DB=ibuy
+      - POSTGRES_PASSWORD=password
     volumes:
-      - mysql-data:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
 
   api:
     build:
@@ -22,4 +22,4 @@ services:
       - .:/app
 
 volumes:
-  mysql-data:
+  postgres-data:
