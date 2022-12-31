@@ -35,7 +35,7 @@ class TestCreateReview:
         product = baker.make(Product)
         user = baker.make(User)
         authenticate(user)
-        data = {'description': '', 'user': user.id}
+        data = {'description': ''}
 
         response = create_review(product.id, data)
 
@@ -45,7 +45,7 @@ class TestCreateReview:
         product = baker.make(Product)
         user = baker.make(User)
         authenticate(user)
-        data = {'description': 'a', 'user': user.id}
+        data = {'description': 'a'}
 
         response = create_review(product.id, data)
 
@@ -56,7 +56,9 @@ class TestCreateReview:
 @pytest.mark.django_db
 class TestRetrieveReview:
     def test_if_review_does_not_exists_returns_404(self, retrieve_review):
-        response = retrieve_review(1, 1)
+        product = baker.make(Product)
+
+        response = retrieve_review(product.id, 0)
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.data['detail'] == 'Not found.'
